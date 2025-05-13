@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .theme-toggle {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .animated-box {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            margin: 20px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .animated-box:hover {
+            transform: rotate(15deg);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .bouncing {
+            animation: bounce 0.5s ease infinite;
+        }
+
+        .dark-theme {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-theme .theme-toggle {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .light-theme {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .light-theme .theme-toggle {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="container">
+        <button class="theme-toggle">Toggle Theme</button>
+        <div class="animated-box"></div>
+        <p>Click the box to toggle bounce animation!</p>
+    </div>
+
+    <script>
+        // Elements
+        const body = document.body;
+        const themeToggle = document.querySelector('.theme-toggle');
+        const animatedBox = document.querySelector('.animated-box');
+
+        // Load saved theme preference
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.className = savedTheme;
+            }
+        }
+
+        // Save theme preference
+        function saveThemePreference(theme) {
+            localStorage.setItem('theme', theme);
+        }
+
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            const newTheme = body.className === 'light-theme' ? 'dark-theme' : 'light-theme';
+            body.className = newTheme;
+            saveThemePreference(newTheme);
+        });
+
+        // Toggle bounce animation
+        animatedBox.addEventListener('click', () => {
+            animatedBox.classList.toggle('bouncing');
+            
+            // Save animation state
+            localStorage.setItem('isBoxBouncing', animatedBox.classList.contains('bouncing'));
+        });
+
+        // Load saved animation state
+        function loadAnimationState() {
+            const isBoxBouncing = localStorage.getItem('isBoxBouncing') === 'true';
+            if (isBoxBouncing) {
+                animatedBox.classList.add('bouncing');
+            }
+        }
+
+        // Initialize saved preferences
+        document.addEventListener('DOMContentLoaded', () => {
+            loadThemePreference();
+            loadAnimationState();
+        });
+    </script>
+</body>
+</html>
